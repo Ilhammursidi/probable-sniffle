@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bloom & Bean — Coffee Shop</title>
+  <style>
+    /* ========== RESET ========== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color:#222;background:linear-gradient(180deg,#fff8f2 0%, #fff 40%);line-height:1.45}
+
+    /* ========== LAYOUT ========== */
+    header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.6);backdrop-filter:blur(6px);border-bottom:1px solid rgba(20,20,20,0.04)}
+    .nav{max-width:1100px;margin:0 auto;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .brand{display:flex;align-items:center;gap:.75rem}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#6b3b16,#c88e4a);display:grid;place-items:center;color:#fff;font-weight:700;box-shadow:0 6px 18px rgba(107,59,22,0.18)}
+    nav a{margin-left:1rem;text-decoration:none;color:#3b2b23;font-weight:600;font-size:0.95rem}
+    .cta{background:#3b2b23;color:#fff;padding:.55rem .9rem;border-radius:9px;font-weight:700;text-decoration:none}
+
+    /* Hero */
+    .hero{min-height:88vh;display:grid;align-items:center;padding:3.5rem 1.25rem;max-width:1100px;margin:0 auto}
+    .hero-grid{display:grid;grid-template-columns:1fr 420px;gap:2.25rem;align-items:center}
+    .kicker{display:inline-block;background:#ffe9d1;color:#7a3f1a;padding:.35rem .6rem;border-radius:999px;font-weight:700;margin-bottom:1rem}
+    h1{font-size:2.8rem;line-height:1.02;color:#241b16}
+    p.lead{margin-top:.85rem;color:#6b584d}
+    .hero-cta{margin-top:1.4rem;display:flex;gap:.8rem}
+    .btn{padding:.8rem 1.1rem;border-radius:10px;text-decoration:none;font-weight:700}
+    .btn-primary{background:#6b3b16;color:#fff}
+    .btn-light{background:transparent;border:2px solid #6b3b16;color:#6b3b16}
+
+    .card-coffee{background:linear-gradient(180deg,rgba(255,255,255,0.9),#fff);padding:1.4rem;border-radius:16px;box-shadow:0 10px 30px rgba(80,58,46,0.08)}
+    .coffee-img{height:220px;border-radius:12px;background-image:linear-gradient(180deg,#f4e6da,#e8d0b9);display:flex;align-items:center;justify-content:center;font-weight:800;color:#6b3b16;font-size:1.4rem}
+
+    /* Sections */
+    section{max-width:1100px;margin:0 auto;padding:3rem 1.25rem}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .menu-card{background:#fff;padding:1.2rem;border-radius:14px;box-shadow:0 8px 24px rgba(80,58,46,0.06);border:1px solid rgba(20,20,20,0.03)}
+    .menu-card h3{font-size:1.1rem;margin-bottom:.5rem}
+    .price{font-weight:800;color:#6b3b16}
+
+    /* Gallery horizontal */
+    .gallery{display:flex;gap:1rem;overflow:hidden;padding:1rem 0}
+    .gallery img{flex:0 0 32%;height:180px;object-fit:cover;border-radius:12px}
+
+    /* Footer */
+    footer{padding:2.5rem 1.25rem;background:linear-gradient(180deg,#241b16,#1a120f);color:#fff;margin-top:2rem}
+    .foot-grid{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;gap:1rem;align-items:center}
+
+    /* ========== FADE-IN ON SCROLL (CSS-only, using Scroll-Linked Animations when supported) ========== */
+    /* Define a custom scroll timeline attached to the root scroller */
+    @scroll-timeline --fadeTimeline {
+      source: auto;
+      orientation: block;
+      time-range: 1;
+    }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px)} to { opacity:1; transform:translateY(0)} }
+
+    .fade-in {
+      opacity:0;transform:translateY(20px);will-change:transform,opacity;
+      animation-name: fadeUp;
+      animation-duration: 0.9s;
+      animation-fill-mode: both;
+      animation-timeline: --fadeTimeline;
+      animation-range: 0.2 0.45; /* start/end positions on the scroll timeline */
+    }
+
+    /* Fallback when @scroll-timeline isn't supported: use a delayed animation via prefers-reduced-motion check */
+    @supports not (animation-timeline: --fadeTimeline) {
+      .fade-in{opacity:0;transform:translateY(20px);transition:all .9s cubic-bezier(.2,.9,.2,1)}
+      /* reveal using the 'reveal' class (we can't toggle without JS) so by default reveal first few; but make content visible for older browsers */
+      .fade-in{opacity:1;transform:none}
+    }
+
+    /* Small helpers */
+    .spacer{height:2rem}
+    .muted{color:#7a6a63}
+    .hero .stats{display:flex;gap:1rem;margin-top:1.6rem}
+    .stat{background:linear-gradient(180deg,#fff,#fff8f2);padding:.7rem 1rem;border-radius:10px;box-shadow:0 8px 22px rgba(107,59,22,0.06);text-align:center}
+
+    /* RESPONSIVE */
+    @media(max-width:980px){
+      .hero-grid{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:repeat(2,1fr)}
+      .gallery img{flex-basis:48%}
+    }
+    @media(max-width:560px){
+      nav a{display:none}
+      .hero{padding-top:2.25rem}
+      h1{font-size:2rem}
+      .grid-3{grid-template-columns:1fr}
+      .logo{width:40px;height:40px}
+    }
+
+    /* little flourish */
+    .accent{color:#b05a2a}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand"><div class="logo">B</div><div>
+        <div style="font-weight:800">Bloom & Bean</div>
+        <div style="font-size:.78rem;color:#6b584d">Artisan Coffee • Pangkep</div>
+      </div></div>
+      <nav>
+        <a href="#menu">Menu</a>
+        <a href="#about">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact" class="cta">Order</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="kicker fade-in">New Autumn Roast</span>
+          <h1 class="fade-in">Wake up to the smell of <span class="accent">slow-brewed</span> mornings.</h1>
+          <p class="lead fade-in">Hand-picked beans, roasted locally. Cozy spaces to work, chat, or escape — Bloom & Bean is your neighborhood refuge for taste and calm.</p>
+          <div class="hero-cta fade-in">
+            <a class="btn btn-primary" href="#menu">See Menu</a>
+            <a class="btn btn-light" href="#about">Our Story</a>
+          </div>
+
+          <div class="stats fade-in" style="margin-top:18px">
+            <div class="stat"><div style="font-size:1.15rem;font-weight:800">12</div><div class="muted">Signature Blends</div></div>
+            <div class="stat"><div style="font-size:1.15rem;font-weight:800">4.9</div><div class="muted">Google Rating</div></div>
+          </div>
+        </div>
+
+        <aside class="card-coffee fade-in">
+          <div class="coffee-img">LATTE ART</div>
+          <div style="margin-top:1rem">
+            <h3 style="margin-bottom:.4rem">Seasonal Latte — Pumpkin Spice</h3>
+            <p class="muted">Creamy, warm, and just sweet enough. Available for a limited time.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem"><div class="price">Rp32.000</div><a class="btn" style="background:#f4e6da;border-radius:9px">Order</a></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="menu">
+      <h2 class="fade-in">Our Menu</h2>
+      <p class="muted fade-in">Classic drinks, single-origin brews, pastries, and a few chef specials.</p>
+      <div class="spacer"></div>
+
+      <div class="grid-3">
+        <div class="menu-card fade-in">
+          <h3>Espresso</h3>
+          <p class="muted">Rich and intense. Double shot pulled to order.</p>
+          <div style="margin-top:8px" class="price">Rp18.000</div>
+        </div>
+
+        <div class="menu-card fade-in">
+          <h3>Flat White</h3>
+          <p class="muted">Silky milk with a bright espresso base.</p>
+          <div style="margin-top:8px" class="price">Rp26.000</div>
+        </div>
+
+        <div class="menu-card fade-in">
+          <h3>Cold Brew</h3>
+          <p class="muted">Slow steeped for 12 hours, smooth finish.</p>
+          <div style="margin-top:8px" class="price">Rp28.000</div>
+        </div>
+      </div>
+
+      <div style="height:1.5rem"></div>
+      <div class="grid-3">
+        <div class="menu-card fade-in">
+          <h3>Single Origin — Sulawesi</h3>
+          <p class="muted">Notes of dark chocolate & spice.</p>
+          <div style="margin-top:8px" class="price">Rp40.000</div>
+        </div>
+
+        <div class="menu-card fade-in">
+          <h3>Signature Blend</h3>
+          <p class="muted">House roast balanced for milk & filter.</p>
+          <div style="margin-top:8px" class="price">Rp35.000</div>
+        </div>
+
+        <div class="menu-card fade-in">
+          <h3>Pastry — Croissant</h3>
+          <p class="muted">Buttery, flaky, served warm.</p>
+          <div style="margin-top:8px" class="price">Rp22.000</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" style="background:linear-gradient(180deg,#fff 0%, #fff8f2 100%);">
+      <h2 class="fade-in">About Bloom & Bean</h2>
+      <p class="muted fade-in">Born from a love of craft coffee and long conversations. We source ethical beans and roast small batches every week.</p>
+
+      <div class="spacer"></div>
+      <div class="gallery fade-in">
+        <img alt="cozy interior" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder">
+        <img alt="barista" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder">
+        <img alt="beans" src="https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder">
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem">
+        <div class="menu-card fade-in">
+          <h3>Our Philosophy</h3>
+          <p class="muted">Coffee is a moment. We design our space, sound, and menu to respect that moment.</p>
+        </div>
+        <div class="menu-card fade-in">
+          <h3>Roast Lab</h3>
+          <p class="muted">Small-batch roasts every Wednesday. Try a cupping with our roaster.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <h2 class="fade-in">Gallery</h2>
+      <p class="muted fade-in">Snapshots from the shop, our roasts, and the community.</p>
+      <div class="spacer"></div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+        <div class="menu-card fade-in" style="padding:0;overflow:hidden"><img alt="latte" src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" style="width:100%;height:220px;object-fit:cover"></div>
+        <div class="menu-card fade-in" style="padding:0;overflow:hidden"><img alt="beans" src="https://images.unsplash.com/photo-1506084868230-bb9d95c24759?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" style="width:100%;height:220px;object-fit:cover"></div>
+        <div class="menu-card fade-in" style="padding:0;overflow:hidden"><img alt="shop" src="https://images.unsplash.com/photo-1541542684-0b0f2b99b4a8?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" style="width:100%;height:220px;object-fit:cover"></div>
+      </div>
+
+      <div style="height:1.5rem"></div>
+      <div class="grid-3">
+        <div class="menu-card fade-in"> <h3>Events</h3><p class="muted">Live acoustic every Friday night.</p></div>
+        <div class="menu-card fade-in"> <h3>Membership</h3><p class="muted">Stamp card — 10th drink free.</p></div>
+        <div class="menu-card fade-in"> <h3>Private Hire</h3><p class="muted">Book the space for workshops.</p></div>
+      </div>
+    </section>
+
+    <section id="contact" style="padding-bottom:6rem">
+      <h2 class="fade-in">Visit & Contact</h2>
+      <p class="muted fade-in">Open daily 07:00 — 21:00. Jalan Kenangan No.7, Pangkep.</p>
+
+      <div style="height:1rem"></div>
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:1.25rem">
+        <form class="menu-card fade-in" style="display:flex;flex-direction:column;gap:.8rem">
+          <label style="font-weight:700">Name</label>
+          <input placeholder="Nama lengkap" style="padding:.6rem;border-radius:8px;border:1px solid rgba(20,20,20,0.06)" />
+          <label style="font-weight:700">Message</label>
+          <textarea placeholder="Pesan / reservasi" rows="5" style="padding:.6rem;border-radius:8px;border:1px solid rgba(20,20,20,0.06)"></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="muted">Prefer email? hello@bloomandbean.coffee</div>
+            <button class="btn btn-primary">Send</button>
+          </div>
+        </form>
+
+        <aside class="menu-card fade-in">
+          <h3>Find us</h3>
+          <p class="muted">Map placeholder — replace with an embedded map if you want.</p>
+          <div style="height:14px"></div>
+          <div style="background:#f4e6da;padding:1rem;border-radius:10px">Parking • Wi-Fi • Pet-friendly mornings</div>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div style="font-weight:900;font-size:1.05rem">Bloom & Bean</div>
+        <div class="muted" style="margin-top:.4rem">© 2025 Bloom & Bean — crafted with care</div>
+      </div>
+      <div class="muted">Follow us: Instagram • Twitter • Facebook</div>
+    </div>
+  </footer>
+
+  <!-- NOTE: This page uses the CSS Scroll-Linked Animations spec for scroll-driven fade-in. -->
+</body>
+</html>
